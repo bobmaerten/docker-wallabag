@@ -4,20 +4,28 @@ Dockerfile used to build a wallabag docker image.
 
 Wallabag is an opensource project created by @nicosomb
 
-## Instructions
+## Usage from index
+```
+sudo docker pull bobmaerten/docker-wallabag
+sudo docker run -p 8080:80 -d bobmaerten/docker-wallabag
+```
+Then head your browser to http://localhost:8080 and enjoy a fresh Wallabag install.
 
-### Building images
+
+## Instructions for building from Dockerfile
+
+### Build
 ```
 sudo docker build -t wallabag .
 ```
 
-### Lauching images
+### Launch and test
 ```
 sudo docker run -p 8080:80 --name wallabag -d wallabag:latest
 ```
 Head your browser to http://localhost:8080
 
-### stopping images
+### Stop
 ```
 sudo docker stop wallabag
 sudo docker rmi wallabag
