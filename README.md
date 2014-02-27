@@ -7,7 +7,8 @@ Wallabag is an opensource project created by @nicosomb
 ## Usage from index
 ```
 sudo docker pull bobmaerten/docker-wallabag
-sudo docker run -p 8080:80 -d bobmaerten/docker-wallabag
+$ID=$(sudo docker run -p 8080:80 -d bobmaerten/docker-wallabag)
+sudo docker stop $ID
 ```
 Then head your browser to http://localhost:8080 and enjoy a fresh Wallabag install.
 
