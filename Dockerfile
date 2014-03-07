@@ -11,7 +11,7 @@ RUN apt-get update
 
 # Install git nginx php-fpm and wallabag prereqs
 RUN apt-get install -y nginx git php5-cli php5-common php5-sqlite php5-curl \
-                       php5-fpm php5-json php5-tidy curl wget supervisor
+                       php5-fpm php5-json php5-tidy curl wget gettext supervisor
 RUN mkdir -p /var/log/supervisor
 
 # Configure php-fpm
