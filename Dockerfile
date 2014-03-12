@@ -16,8 +16,20 @@ RUN /etc/my_init.d/00_regen_ssh_host_keys.sh
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
 
-# Install latest nginx
+# Install locales
 ENV DEBIAN_FRONTEND noninteractive
+RUN locale-gen cs_CZ.UTF-8
+RUN locale-gen de_DE.UTF-8
+RUN locale-gen es_ES.UTF-8
+RUN locale-gen fr_FR.UTF-8
+RUN locale-gen it_IT.UTF-8
+RUN locale-gen pl_PL.UTF-8
+RUN locale-gen pt_BR.UTF-8
+RUN locale-gen ru_RU.UTF-8
+RUN locale-gen sl_SI.UTF-8
+RUN locale-gen uk_UA.UTF-8
+
+# Install packages
 RUN apt-get install -y python-software-properties software-properties-common
 
 # Install wallabag prereqs
