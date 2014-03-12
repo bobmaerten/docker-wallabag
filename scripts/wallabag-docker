@@ -1,8 +1,13 @@
 #!/usr/bin/env bash
 
-DBPATH='/home/bob/.config/docker-wallabag'       # Set to an abolute path!
+DBPATH='/home/bob/.config/docker-wallabag'       # Absolute path to persistence DB directory
+
+# Uncomment and specify to use your own wallabag codebase
+# SOURCEPATH='/home/bob/code/wallabag'           # Absolute path to wallabag sources
+
 IMAGENAME='bobmaerten/docker-wallabag:latest'
 
+WALLABAGSOURCE='wallabag-source'
 WALLABAGDB='wallabag-db'
 WALLABAG='wallabag-server'
 
@@ -36,14 +41,25 @@ case "$1" in
             setup
         fi
 
+        VOLUMES=''
         sudo docker ps -a | grep -q $WALLABAGDB
         if [ $? -ne 0 ]; then
             sudo docker run --name $WALLABAGDB -v $DBPATH:/var/www/wallabag/db ubuntu true
+            VOLUMES="--volumes-from $WALLABAGDB"
+        fi
+
+        if [ -n "$SOURCEPATH" ]; then
+            sudo docker ps -a | grep -q $WALLABAGSOURCE
+            if [ $? -ne 0 ]; then
+                sudo docker run --name $WALLABAGSOURCE -v $SOURCEPATH:/var/www/wallabag ubuntu true
+                VOLUMES="--volumes-from $WALLABAGSOURCE $VOLUMES"
+            fi
         fi
 
         sudo docker ps -a | grep -v Exit | grep -q $WALLABAG
         if [ $? -ne 0 ]; then
-            CONTAINER_ID=$(sudo docker run -d --name $WALLABAG --volumes-from $WALLABAGDB -p=8080:80 $IMAGENAME /sbin/my_init --enable-insecure-key)
+            echo $VOLUMES
+            CONTAINER_ID=$(sudo docker run -d --name $WALLABAG $VOLUMES -p=8080:80 $IMAGENAME /sbin/my_init --enable-insecure-key)
         fi
         getStatus
         ;;
@@ -61,6 +77,10 @@ case "$1" in
                 echo 'Stopped.'
                 DB=$(sudo docker ps -a | grep $WALLABAGDB | awk '{print $1}')
                 DB=$(sudo docker rm $DB)
+                if [ -n "$SOURCEPATH" ]; then
+                    SRC=$(sudo docker ps -a | grep $WALLABAGSOURCE | awk '{print $1}')
+                    SRC=$(sudo docker rm $SRC)
+                fi
             fi
         else
             echo 'Not running.'
