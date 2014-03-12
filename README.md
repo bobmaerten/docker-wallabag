@@ -15,6 +15,11 @@ Then head your browser to http://localhost:8080 and enjoy a fresh Wallabag insta
 The [wallabag-docker](script/wallabag-docker) enable persistance of the database outside of the container.
 Modify the DBPATH variable at will, but keep an absolute path in order to things to work properly.
 
+### Testing wallabag dev version
+
+The same script enable to "mount" a specific source directory instead of the one from the container.
+Just uncomment le SOURCEPATH line, and set it to the absolut path of the wallabag source directory you want to use.
+
 ## Instructions for building from Dockerfile
 
 ### Build
