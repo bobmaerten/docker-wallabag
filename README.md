@@ -12,7 +12,7 @@ Then head your browser to http://localhost:8080 and enjoy a fresh Wallabag insta
 
 ### Persistance of the database
 
-The [wallabag-docker](script/wallabag-docker) enable persistance of the database outside of the container.
+The [wallabag-docker](scripts/wallabag-docker) enable persistance of the database outside of the container.
 Modify the DBPATH variable at will, but keep an absolute path in order to things to work properly.
 
 ### Testing wallabag dev version
