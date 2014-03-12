@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+DBPATH='/home/bob/.config/docker-wallabag'       # Set to an abolute path!
+IMAGENAME='bobmaerten/docker-wallabag:phusion'
+
+WALLABAGDB='wallabag-db'
+WALLABAG='wallabag-server'
+
+function setup() {
+    mkdir -p $DBPATH
+    echo "#Exporting db from the container to host, in $DBPATH"
+    ID=$(sudo docker run -d $IMAGENAME /sbin/my_init --skip-startup-files --quiet)
+    sudo docker cp $ID:/var/www/wallabag/db/poche.sqlite $DBPATH
+    sudo chown -R $USER:$USER $DBPATH
+    sudo chmod -R 777 $DBPATH
+    ID=$(sudo docker stop $ID)
+    ID=$(sudo docker rm $ID)
+}
+
+function getStatus(){
+    CONTAINER_ID=$(sudo docker ps -a | grep -v Exit | grep $WALLABAG | awk '{print $1}')
+    if [ -z $CONTAINER_ID ] ; then
+        echo 'Not running.'
+        return 1
+    else
+        URL=$(sudo docker port $CONTAINER_ID 80)
+        echo "Running in container: $CONTAINER_ID"
+        echo "Web server on http://$URL"
+        return 0
+    fi
+}
+
+case "$1" in
+    start)
+        if [ ! -f $DBPATH/poche.sqlite ] ; then
+            setup
+        fi
+
+        sudo docker ps -a | grep -q $WALLABAGDB
+        if [ $? -ne 0 ]; then
+            sudo docker run --name $WALLABAGDB -v $DBPATH:/var/www/wallabag/db ubuntu true
+        fi
+
+        sudo docker ps -a | grep -v Exit | grep -q $WALLABAG
+        if [ $? -ne 0 ]; then
+            CONTAINER_ID=$(sudo docker run -d --name $WALLABAG --volumes-from $WALLABAGDB -p=8080:80 $IMAGENAME /sbin/my_init --enable-insecure-key)
+        fi
+        getStatus
+        ;;
+
+    status)
+        getStatus
+        ;;
+
+    stop)
+        CONTAINER_ID=$(sudo docker ps -a | grep -v Exit | grep $WALLABAG | awk '{print $1}')
+        if [[ -n $CONTAINER_ID ]] ; then
+            SV=$(sudo docker stop $CONTAINER_ID)
+            SV=$(sudo docker rm $CONTAINER_ID)
+            if [ $? -eq 0 ] ; then
+                echo 'Stopped.'
+                DB=$(sudo docker ps -a | grep $WALLABAGDB | awk '{print $1}')
+                DB=$(sudo docker rm $DB)
+            fi
+        else
+            echo 'Not running.'
+            exit 1
+        fi
+        ;;
+
+    *)
+        echo "Usage: `basename $0` {start|stop|status}"
+        exit 1
+        ;;
+esac
+
+exit 0
