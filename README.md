@@ -6,7 +6,7 @@ Dockerfile used to build a wallabag docker image.
 
     ID=$(sudo docker run -p 8080:80 -d bobmaerten/docker-wallabag:latest /sbin/my_init)
 
-Then head your browser to http://localhost:8080 and enjoy a fresh Wallabag install. When you're finished, just stop the docker container:
+Then head your browser to http://localhost:8080 and enjoy a fresh wallabag install. When you're finished, just stop the docker container:
 
     sudo docker stop $ID
 
@@ -35,6 +35,6 @@ Just uncomment le SOURCEPATH line, and set it to the absolut path of the wallaba
 
 # Credits
 
-Wallabag is an opensource project created by @nicosomb
+wallabag is an opensource project created by @nicosomb
 
 This docker image is build upon the baseimage made by phusion.
