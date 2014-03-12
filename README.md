@@ -4,7 +4,7 @@ Dockerfile used to build a wallabag docker image.
 
 ## Usage from index
 
-    ID=$(sudo docker run -p 8080:80 -d bobmaerten/docker-wallabag /sbin/my_init)
+    ID=$(sudo docker run -p 8080:80 -d bobmaerten/docker-wallabag:latest /sbin/my_init)
 
 Then head your browser to http://localhost:8080 and enjoy a fresh Wallabag install. When you're finished, just stop the docker container:
 

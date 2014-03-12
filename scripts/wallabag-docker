@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DBPATH='/home/bob/.config/docker-wallabag'       # Set to an abolute path!
-IMAGENAME='bobmaerten/docker-wallabag:phusion'
+IMAGENAME='bobmaerten/docker-wallabag:latest'
 
 WALLABAGDB='wallabag-db'
 WALLABAG='wallabag-server'
