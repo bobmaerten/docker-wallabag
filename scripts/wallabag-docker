@@ -3,7 +3,10 @@
 DBPATH='/home/bob/.config/docker-wallabag'       # Absolute path to persistence DB directory
 
 # Uncomment and specify to use your own wallabag codebase
-# SOURCEPATH='/home/bob/code/wallabag'           # Absolute path to wallabag sources
+# SOURCEPATH='/home/bob/Work/wallabag'           # Absolute path to wallabag sources
+
+# Uncomment and specify to use your own wallabag SALT value in config file
+SALT='34gAogagAigJaurgbqfdvqQergvqer'            # No space in this string please
 
 IMAGENAME='bobmaerten/docker-wallabag:latest'
 
@@ -29,7 +32,9 @@ function getStatus(){
         return 1
     else
         URL=$(sudo docker port $CONTAINER_ID 80)
+        IP=$(sudo docker inspect $CONTAINER_ID | grep IPAddress | awk '{print $2}' | cut -d\" -f2)
         echo "Running in container: $CONTAINER_ID"
+        echo "IP address: $IP"
         echo "Web server on http://$URL"
         return 0
     fi
@@ -56,10 +61,12 @@ case "$1" in
             fi
         fi
 
+        if [ -n "$SALT" ]; then
+            WALLABAG_ENV="--env WALLABAG_SALT=$SALT"
+        fi
         sudo docker ps -a | grep -v Exit | grep -q $WALLABAG
         if [ $? -ne 0 ]; then
-            echo $VOLUMES
-            CONTAINER_ID=$(sudo docker run -d --name $WALLABAG $VOLUMES -p=8080:80 $IMAGENAME /sbin/my_init --enable-insecure-key)
+            CONTAINER_ID=$(sudo docker run $WALLABAG_ENV -d --name $WALLABAG $VOLUMES -p=8080:80 $IMAGENAME /sbin/my_init --enable-insecure-key)
         fi
         getStatus
         ;;
