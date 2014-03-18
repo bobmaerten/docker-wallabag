@@ -20,6 +20,13 @@ Modify the DBPATH variable at will, but keep an absolute path in order to things
     ./scripts/wallabag-docker
     Usage: wallabag-docker {start|stop|status}
 
+## Using ENV variable to pass SALT value in config file
+
+You can specify a `--env WALLABAG_SALT=<insert salt value here>` in the docker run command in order to fix the salt value in the wallabag config file on container startup.
+Example:
+
+    sudo docker run -p 8080:80 -d --env WALLABAG_SALT=34gAogagAigJaurgbqfdvqQergvqer bobmaerten/docker-wallabag:latest /sbin/my_init
+
 ### SSH into the container
 
 Please refer to the [Phusion documentation](https://github.com/phusion/baseimage-docker#login) to fetch the insecure-key used by default on the container started by the script.

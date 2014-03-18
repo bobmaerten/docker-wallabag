@@ -62,8 +62,9 @@ RUN cd /var/www \
     && cd wallabag \
     && unzip -q /tmp/vendor.zip \
     && cp inc/poche/config.inc.php.new inc/poche/config.inc.php \
-    && sed -i "s/('SALT', '')/('SALT', 'absolutlynotsafesaltvalue')/" inc/poche/config.inc.php \
     && cp install/poche.sqlite db/
+
+ADD 99_change_wallabag_config_salt.sh /etc/my_init.d/99_change_wallabag_config_salt.sh
 
 RUN rm -f /tmp/wallabag-1.5.2.zip /tmp/vendor.zip
 RUN rm -rf /var/www/wallabag/install
