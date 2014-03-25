@@ -32,7 +32,7 @@ function getStatus(){
         return 1
     else
         URL=$(sudo docker port $CONTAINER_ID 80)
-        IP=$(sudo docker inspect $CONTAINER_ID | grep IPAddress | awk '{print $2}' | cut -d\" -f2)
+        IP=$(sudo docker inspect --format '{{ .NetworkSettings.IPAddress }}' $CONTAINER_ID)
         echo "Running in container: $CONTAINER_ID"
         echo "IP address: $IP"
         echo "Web server on http://$URL"
