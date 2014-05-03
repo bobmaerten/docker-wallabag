@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DBPATH='/home/bob/.config/docker-wallabag'       # Absolute path to persistence DB directory
+DBPATH="$(dirname `readlink -m $0`)/../data"     # Or replace by absolute path to persistence DB directory
 
 # Uncomment and specify to use your own wallabag codebase
 # SOURCEPATH='/home/bob/Work/wallabag'           # Absolute path to wallabag sources

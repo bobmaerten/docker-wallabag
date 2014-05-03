@@ -39,7 +39,7 @@ RUN add-apt-repository ppa:nginx/stable \
           php5-curl php5-fpm php5-json php5-tidy wget unzip gettext
 
 # Configure php-fpm
-RUN echo "cgi.fix_pathinfo = 0;" >> /etc/php5/fpm/php.ini
+RUN echo "cgi.fix_pathinfo = 0" >> /etc/php5/fpm/php.ini
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
 ADD www.conf /etc/php5/fpm/pool.d/www.conf
@@ -52,13 +52,13 @@ ADD nginx.sh /etc/service/nginx/run
 
 
 # Extract wallabag code
-ADD wallabag-1.5.2.zip /tmp/wallabag-1.5.2.zip
+ADD wallabag-1.6.1.zip /tmp/wallabag-1.6.1.zip
 ADD vendor.zip /tmp/vendor.zip
 
 RUN mkdir -p /var/www
 RUN cd /var/www \
-    && unzip -q /tmp/wallabag-1.5.2.zip \
-    && mv wallabag-1.5.2 wallabag \
+    && unzip -q /tmp/wallabag-1.6.1.zip \
+    && mv wallabag-1.6.1b wallabag \
     && cd wallabag \
     && unzip -q /tmp/vendor.zip \
     && cp inc/poche/config.inc.php.new inc/poche/config.inc.php \
@@ -66,7 +66,7 @@ RUN cd /var/www \
 
 ADD 99_change_wallabag_config_salt.sh /etc/my_init.d/99_change_wallabag_config_salt.sh
 
-RUN rm -f /tmp/wallabag-1.5.2.zip /tmp/vendor.zip
+RUN rm -f /tmp/wallabag-1.6.1.zip /tmp/vendor.zip
 RUN rm -rf /var/www/wallabag/install
 
 RUN chown -R www-data:www-data /var/www/wallabag
