@@ -51,22 +51,25 @@ RUN mkdir /etc/service/nginx
 ADD nginx.sh /etc/service/nginx/run
 
 
+# Wallabag version
+ENV WALLABAG_VERSION 1.7.0
+
 # Extract wallabag code
-ADD wallabag-1.6.1.zip /tmp/wallabag-1.6.1.zip
+ADD https://github.com/wallabag/wallabag/archive/$WALLABAG_VERSION.zip /tmp/wallabag-$WALLABAG_VERSION.zip
 ADD vendor.zip /tmp/vendor.zip
 
 RUN mkdir -p /var/www
 RUN cd /var/www \
-    && unzip -q /tmp/wallabag-1.6.1.zip \
-    && mv wallabag-1.6.1b wallabag \
+    && unzip -q /tmp/wallabag-$WALLABAG_VERSION.zip \
+    && mv wallabag-$WALLABAG_VERSION wallabag \
     && cd wallabag \
     && unzip -q /tmp/vendor.zip \
-    && cp inc/poche/config.inc.php.new inc/poche/config.inc.php \
+    && cp inc/poche/config.inc.default.php inc/poche/config.inc.php \
     && cp install/poche.sqlite db/
 
 ADD 99_change_wallabag_config_salt.sh /etc/my_init.d/99_change_wallabag_config_salt.sh
 
-RUN rm -f /tmp/wallabag-1.6.1.zip /tmp/vendor.zip
+RUN rm -f /tmp/wallabag-$WALLABAG_VERSION.zip /tmp/vendor.zip
 RUN rm -rf /var/www/wallabag/install
 
 RUN chown -R www-data:www-data /var/www/wallabag
