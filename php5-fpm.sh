@@ -1,4 +1,4 @@
 #!/bin/sh
 set -e
 
-service php5-fpm start
+/usr/sbin/php5-fpm -F

@@ -2,7 +2,7 @@
 # sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
-FROM phusion/baseimage:0.9.8
+FROM phusion/baseimage:0.9.15
 MAINTAINER Bob Maerten <bob.maerten@gmail.com>
 
 # Set correct environment variables.
@@ -29,9 +29,6 @@ RUN locale-gen ru_RU.UTF-8
 RUN locale-gen sl_SI.UTF-8
 RUN locale-gen uk_UA.UTF-8
 
-# Install packages
-RUN apt-get install -y python-software-properties software-properties-common
-
 # Install wallabag prereqs
 RUN add-apt-repository ppa:nginx/stable \
     && apt-get update \
@@ -42,21 +39,20 @@ RUN add-apt-repository ppa:nginx/stable \
 RUN echo "cgi.fix_pathinfo = 0" >> /etc/php5/fpm/php.ini
 RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
-ADD www.conf /etc/php5/fpm/pool.d/www.conf
+COPY www.conf /etc/php5/fpm/pool.d/www.conf
 
 RUN mkdir /etc/service/php5-fpm
-ADD php5-fpm.sh /etc/service/php5-fpm/run
+COPY php5-fpm.sh /etc/service/php5-fpm/run
 
 RUN mkdir /etc/service/nginx
-ADD nginx.sh /etc/service/nginx/run
-
+COPY nginx.sh /etc/service/nginx/run
 
 # Wallabag version
 ENV WALLABAG_VERSION 1.7.2
 
 # Extract wallabag code
 ADD https://github.com/wallabag/wallabag/archive/$WALLABAG_VERSION.zip /tmp/wallabag-$WALLABAG_VERSION.zip
-ADD vendor.zip /tmp/vendor.zip
+ADD http://wllbg.org/vendor /tmp/vendor.zip
 
 RUN mkdir -p /var/www
 RUN cd /var/www \
@@ -67,7 +63,7 @@ RUN cd /var/www \
     && cp inc/poche/config.inc.default.php inc/poche/config.inc.php \
     && cp install/poche.sqlite db/
 
-ADD 99_change_wallabag_config_salt.sh /etc/my_init.d/99_change_wallabag_config_salt.sh
+COPY 99_change_wallabag_config_salt.sh /etc/my_init.d/99_change_wallabag_config_salt.sh
 
 RUN rm -f /tmp/wallabag-$WALLABAG_VERSION.zip /tmp/vendor.zip
 RUN rm -rf /var/www/wallabag/install
@@ -76,7 +72,7 @@ RUN chown -R www-data:www-data /var/www/wallabag
 RUN chmod 755 -R /var/www/wallabag
 
 # Configure nginx to serve wallabag app
-ADD ./nginx-wallabag /etc/nginx/sites-available/default
+COPY nginx-wallabag /etc/nginx/sites-available/default
 
 EXPOSE 80
 
