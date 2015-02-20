@@ -48,7 +48,7 @@ RUN mkdir /etc/service/nginx
 COPY nginx.sh /etc/service/nginx/run
 
 # Wallabag version
-ENV WALLABAG_VERSION 1.8.1
+ENV WALLABAG_VERSION 1.9
 
 # Extract wallabag code
 ADD https://github.com/wallabag/wallabag/archive/$WALLABAG_VERSION.zip /tmp/wallabag-$WALLABAG_VERSION.zip
