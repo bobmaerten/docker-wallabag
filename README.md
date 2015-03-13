@@ -19,6 +19,8 @@ Modify the DBPATH variable at will, but keep an absolute path in order to things
 
     ./scripts/wallabag-docker
     Usage: wallabag-docker {start|stop|status}
+    
+The default login credentials associated with the database are: `wallabag`/`wallabag`
 
 ## Using ENV variable to pass SALT value in config file
 
