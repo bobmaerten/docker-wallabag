@@ -2,7 +2,7 @@
 # sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
-FROM phusion/baseimage:0.9.16
+FROM phusion/baseimage:0.9.17
 MAINTAINER Bob Maerten <bob.maerten@gmail.com>
 
 # Set correct environment variables.
@@ -43,7 +43,7 @@ RUN mkdir /etc/service/nginx
 COPY nginx.sh /etc/service/nginx/run
 
 # Wallabag version
-ENV WALLABAG_VERSION 1.9
+ENV WALLABAG_VERSION 1.9.1-b
 
 # Extract wallabag code
 ADD https://github.com/wallabag/wallabag/archive/$WALLABAG_VERSION.zip /tmp/wallabag-$WALLABAG_VERSION.zip
