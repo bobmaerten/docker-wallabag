@@ -2,7 +2,7 @@
 # sure you lock down to a specific version, not to `latest`!
 # See https://github.com/phusion/baseimage-docker/blob/master/Changelog.md for
 # a list of version numbers.
-FROM phusion/baseimage:0.9.17
+FROM phusion/baseimage:0.9.18
 MAINTAINER Bob Maerten <bob.maerten@gmail.com>
 
 # Set correct environment variables.
@@ -56,14 +56,15 @@ RUN cd /var/www \
  && cd wallabag \
  && unzip -q /tmp/vendor.zip \
  && cp inc/poche/config.inc.default.php inc/poche/config.inc.php \
- && cp install/poche.sqlite db/ \
  && rm -f /tmp/wallabag-$WALLABAG_VERSION.zip /tmp/vendor.zip \
  && rm -rf /var/www/wallabag/install
 
 COPY 99_change_wallabag_config_salt.sh /etc/my_init.d/99_change_wallabag_config_salt.sh
 
+COPY data/poche.sqlite /var/www/wallabag/db/ 
 RUN chown -R www-data:www-data /var/www/wallabag \
- && chmod 755 -R /var/www/wallabag
+ && chmod 775 -R /var/www/wallabag \
+ && chmod 777 -R /var/www/wallabag/db
 
 # Configure nginx to serve wallabag app
 COPY nginx-wallabag /etc/nginx/sites-available/default
