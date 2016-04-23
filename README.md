@@ -1,6 +1,10 @@
 # docker-wallabag
 
-Dockerfile used to build a wallabag docker image.
+Dockerfile used to build a wallabag 1.x Docker image.
+
+## DEPRACATION WARNING
+
+The docker image is for the last 1.x version of wallabag. For newer version please report to [the official docker wallabag repo](https://github.com/wallabag/docker).
 
 ## Usage from index.docker.io
 
@@ -19,7 +23,7 @@ Modify the DBPATH variable at will, but keep an absolute path in order to things
 
     ./scripts/wallabag-docker
     Usage: wallabag-docker {start|stop|status}
-    
+
 The default login credentials associated with the database are: `wallabag`/`wallabag`
 
 ## Using ENV variable to pass SALT value in config file
